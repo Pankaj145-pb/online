@@ -1,8 +1,13 @@
-body{
-background-color:blue;
-}
-
 #cart-icon{
 width:25px;
-display:inline-block
+display:inline-block;
+}
+
+/* Modify the backgorund color */ 
+.navbar-custom { 
+    background-color: lightgreen; 
+} 
+
+.col {
+    size: 100px;
 }

@@ -1,0 +1,11 @@
+{% extends 'myapp/base.html' %}
+{% blockcontent %}
+
+{% if user.is_authenticated %}
+
+  <h3>You have Been Successfuly logged out</h3>
+  <h4>Login to Continue</h4>
+  <div class="log in"> 
+<a href="{% url 'Login' %}"> <button type="button">Login</button> </a>
+  </div>
+{% endblock %}
