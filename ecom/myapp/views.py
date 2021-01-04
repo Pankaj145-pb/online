@@ -1,18 +1,26 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-# from models import Product, Order, Shipping, Customer
+from .models import *
 
 # Create your views here.
 
 
 def index(request):
-    context = {}
+    products = Product.objects.all()
+    context = {'products': products}
     return render(request, 'myapp/index.html', context)
 
+
 def cart(request):
-    context = {}
-    # product = Product.objects.all()
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items =order.orderitem_set.all()
+    else:
+        items = []
+    context = {'items':items}
     return render (request, 'myapp/cart.html', context)
+
 
 def checkout(request):
     context = {}
