@@ -18,8 +18,9 @@ def cart(request):
         items =order.orderitem_set.all()
     else:
         items = []
-    context = {'items':items}
-    return render (request, 'myapp/cart.html', context)
+        order ={'get_cart_total':0, 'get_cart_items':0}
+    context = {'items':items, 'order':order}
+    return render(request, 'myapp/cart.html', context)
 
 
 def checkout(request):
