@@ -1,11 +1,11 @@
-{% extends 'myapp/base.html' %}
-{% block content %}
+{% extends 'myapp/base.html'%}
+{% block title %}Login{% endblock %}
 
-<h3>Login</h3>
-<form method="POST">
+{% block content %}
+  <h2>Login</h2>
+  <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="button" value="SignIn">
-</form>
-
-{% endblock %}
+    <button type="submit" style="margin:10px 10px 20px 130px">Login</button>
+  </form>
+ {% endblock %}
