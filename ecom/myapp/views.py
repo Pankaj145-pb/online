@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from django.views import generic
 from django.contrib.auth.forms import UserCreationForm
+from paypal.standard.forms import PayPalPaymentsForm
 from django.urls import reverse_lazy
+from django.views.generic import TemplateView
 from django.http import JsonResponse
 import json
 from .models import *
+from django.shortcuts import get_object_or_404
 
 
 
@@ -39,11 +42,12 @@ def cart(request):
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items =order.orderitem_set.all()
+        cartItems = order.get_cart_items
     else:
         items = []
         order = {'get_cart_total': 0, 'get_cart_items': 0}
 
-    context = {'items': items, 'order': order, 'shipping': False}
+    context = {'items': items, 'order': order}
     return render(request, 'myapp/cart.html', context)
 
 
@@ -52,11 +56,12 @@ def checkout(request):
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
+        cartItems = order.get_cart_items
     else:
         items = []
-        order = {'get_cart_total':0, 'get_cart_items':0}
+        order = {'get_cart_total':0, 'get_cart_items':0, 'shipping':False}
 
-    context = {'items':items, 'order':order, 'shipping': False}
+    context = {'items':items, 'order':order}
     return render(request, 'myapp/checkout.html', context)
 
 
@@ -85,3 +90,28 @@ def updateitem(request):
         orderitem.delete()
 
     return JsonResponse('item was added', safe=False)
+
+
+# def process_payment(request):
+#     order_id = request.session.get('order_id')
+#     order = get_object_or_404(Order, id=order_id)
+#     host = request.get_host()
+
+#     paypal_dict = {
+#         'business': settings.PAYPAL_RECEIVER_EMAIL,
+#         'amount': '%.2f' % order.total_cost().quantize(
+#             Decimal('.01')),
+#         'item_name': 'Order {}'.format(order.id),
+#         'invoice': str(order.id),
+#         'currency_code': 'USD',
+#         'notify_url': 'http://{}{}'.format(host,reverse('paypal-ipn')),
+#         'return_url': 'http://{}{}'.format(host,reverse('payment_done')),
+#         'cancel_return': 'http://{}{}'.format(host,reverse('payment_cancelled')),
+    # }
+
+    # form = PayPalPaymentsForm(initial=paypal_dict)
+    # return render(request, 'myapp/payment.html', {'order': order, 'form': form})
+
+
+class Payment(TemplateView):
+    template_name = 'myapp/payment.html'
