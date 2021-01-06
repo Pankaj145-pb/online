@@ -1,5 +1,7 @@
+from django.db.models.functions import datetime
 from django.shortcuts import render
 from django.views import generic
+from django.views.generic import TemplateView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.http import JsonResponse
@@ -30,7 +32,7 @@ def index(request):
 
 
     products = Product.objects.all()
-    context = {'products': products, 'cartItems': cartItems, 'shipping':False}
+    context = {'products': products, 'cartItems': cartItems}
     return render(request, 'myapp/index.html', context)
 
 
@@ -39,12 +41,11 @@ def cart(request):
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items =order.orderitem_set.all()
-        cartItems = order.get_cart_items
     else:
         items = []
-        order = {'get_cart_total': 0, 'get_cart_items': 0}
+        order = {'get_cart_total': 0, 'get_cart_items': 0, 'shipping': False}
 
-    context = {'items': items, 'order': order, 'shipping': False}
+    context = {'items': items, 'order': order}
     return render(request, 'myapp/cart.html', context)
 
 
@@ -56,9 +57,9 @@ def checkout(request):
         cartItems = order.get_cart_items
     else:
         items = []
-        order = {'get_cart_total':0, 'get_cart_items':0, 'shipping': False}
+        order = {'get_cart_total': 0, 'get_cart_items': 0, 'shipping': False}
 
-    context = {'items':items, 'order':order, 'cartItems':cartItems}
+    context = {'items': items, 'order':order}
     return render(request, 'myapp/checkout.html', context)
 
 
@@ -87,3 +88,39 @@ def updateitem(request):
         orderitem.delete()
 
     return JsonResponse('item was added', safe=False)
+
+
+
+
+
+def processOrder(request):
+    transaction_id = datetime.datetime.now().timestamp()
+    data = json.loads(request.body)
+
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        total = float(data['form']['total'])
+        order.transaction_id = transaction_id
+
+        if total == order.get_cart_total:
+            order.complete = True
+        order.save()
+
+        if order.shipping == True:
+            Shipping.objects.create(
+                customer=customer,
+                order=order,
+                address=data['shipping']['address'],
+                city=data['shipping']['city'],
+                state=data['shipping']['state'],
+                zipcode=data['shipping']['zipcode'],
+            )
+
+        else:
+            print('User is not logged in..')
+    return JsonResponse('Payment complete', safe=False)
+
+
+class Payment(TemplateView):
+    template_name = 'myapp/payment.html'
