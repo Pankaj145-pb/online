@@ -10,7 +10,8 @@
   <img src="{{product.imageURL}}" class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title">{{ product.name }}</h5>
-    <a href="{% url 'cart' %}" class="btn btn-primary">Add To Cart</a>
+
+    <button data-product= "{{product.id}}" data-action="add"  class="btn btn-primary add-btn update-cart">Add To Cart</button>
     <a href="{{ product.imageURL }}" class="btn btn-success">View</a>
       <h4 style="display: inline-block;float:right;">{{product.price}}$</h4>
   </div>

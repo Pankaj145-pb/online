@@ -33,9 +33,6 @@
 						<div class="form-field">
 							<input class="form-control" type="text" name="zipcode" placeholder="Zip code..">
 						</div>
-						<div class="form-field">
-							<input class="form-control" type="text" name="country" placeholder="Zip code..">
-						</div>
                     </div>
 
                     <hr>
@@ -58,7 +55,7 @@
                 <h3>Order Summary</h3>
                 <hr>
                 <div class="cart-row">
-					<div style="flex:2"><img class="row-image" src="#"></div>
+					<div style="flex:2"><img class="row-image" src="{{ imageURl }}"></div>
 					<div style="flex:2"><p>Products</p></div>
 					<div style="flex:1"><p>{{ order.get_cart_total }}</p></div>
 					<div style="flex:1"><p>x{{ order.get_cart_items }}</p></div>
@@ -75,4 +72,10 @@
 		</div>
 	</div>
 
+	<script type="text/javascript">
+	var shipping = "{{ product.shipping }}"
+	if (shipping == False){
+		document.getElementById(shipping-info).innerHTML = ' '
+	}
+	</script>
 {% endblock %}

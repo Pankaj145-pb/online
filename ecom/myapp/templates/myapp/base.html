@@ -8,6 +8,26 @@
     <link rel="stylesheet" href="{% static 'CSS/mystyle.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
+  <script type="text/javascript">
+    var user = '{{ request.user }}'
+    function getToken(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getToken('csrftoken');
+
+  </script>
     
 </head>
 <body>
@@ -27,16 +47,16 @@
 
       {% if user.is_authenticated %}
       <div class="form-inline my-2 my-lg-0">
-        <a href="{% url 'logout' %}"class="btn btn-success">Logout</a>
+        <a href="{% url 'logout' %}" class="btn btn-success">Logout</a>
         </div>
 
         {% else %}
-        <div class="form-inline my-2 my-lg-0">
-        <a href="{% url 'login' %}"class="btn btn-success">Login</a>
+        <div class="form-inline my-2 my-lg-0" style="margin-right: 3%;">
+        <a href="{% url 'login' %}" class="btn btn-success">Login</a>
         </div>
 
         <div class="form-inline my-2 my-lg-0">
-          <a href="{% url 'register' %}"class="btn btn-success">Register</a>
+          <a href="{% url 'register' %}" class="btn btn-success">Register</a>
 
           {% endif %}
         
@@ -61,5 +81,7 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
 </body>
 </html>
