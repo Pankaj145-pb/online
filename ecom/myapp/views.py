@@ -28,7 +28,7 @@ def index(request):
         cartItems = order.get_cart_items
     else:
         items = []
-        order = {'get_cart_total':0, 'get_cart_items':0}
+        order = {'get_cart_total':0, 'get_cart_items':0, 'shipping': False}
         cartItems = order['get_cart_items']
 
 
@@ -62,6 +62,7 @@ def checkout(request):
         order = {'get_cart_total':0, 'get_cart_items':0, 'shipping':False}
 
     context = {'items':items, 'order':order}
+
     return render(request, 'myapp/checkout.html', context)
 
 
@@ -115,3 +116,9 @@ def updateitem(request):
 
 class Payment(TemplateView):
     template_name = 'myapp/payment.html'
+
+def approve(self, request):
+    for item in OrderItem:
+        if item.orderitem == 'shipping':
+            Payment.is_successful()
+    return item

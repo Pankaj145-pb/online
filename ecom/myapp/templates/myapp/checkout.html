@@ -41,10 +41,10 @@
             </div>
      <br>
 
-     <div class="box-element"  id="payment-info">
-		 <small>Paypal</small>
 
-			<a  class="btn btn-outline-dark" href="{% url 'payment' %}"> Make Payment</a>
+     <div class="box-element"  id="payment-info">
+         <small>Paypal</small>
+		 <a class="btn btn-outline-dark" href="{% url 'payment' %}">Make Payment</a>
 
 		</div>
  </div>
@@ -73,11 +73,19 @@
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+	// var shipping = "{{ order.shipping }}"
+	// if (shipping == 'False'){
+	// 	document.getElementById('shipping-info').innerHTML = ' '
+	// }
+	// var form = document.getElementById('form')
 
-	<!-- <script type="text/javascript">
-	var shipping = "{{ Order.shipping }}"
-	if (shipping = False){
-		document.getElementById('shipping-info').innerHTML = ' '
-	}
-	</script> -->
+	// form.addEventListener('submit', function(e){
+	//  e.preventDefault()
+	//  console.log('form submitted')
+	//  document.getElementById('form-button').classList.add('hidden')
+	//  document.getElementById('payment-info').classList.remove('hidden')
+	//  })
+	</script>
+
 {% endblock %}
