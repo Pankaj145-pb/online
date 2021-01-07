@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 # Remember that we have to place a image field later on
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class Customer(models.Model):
@@ -11,13 +13,20 @@ class Customer(models.Model):
     name = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
 
+
+@receiver(post_save, sender=User)
+def update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Customer.objects.create(user=instance)
+    instance.customer.save()
+
     def __str__(self):
         return self.name
 
 
 class Product(models.Model):
     name = models.CharField(max_length=200, null=True)
-    price = models.FloatField()
+    price = models.FloatField(default=0.00)
     digital = models.BooleanField(default=False, blank=True, null=True)
     image = models.ImageField(blank=True, null=True)
 
@@ -77,12 +86,12 @@ class OrderItem(models.Model):
 class Shipping(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
-    shipping_address = models.CharField(max_length=200)
+    address = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
     state = models.CharField(max_length=200)
     zipcode = models.CharField(max_length=200)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.shipping_address
+        return self.address
 
