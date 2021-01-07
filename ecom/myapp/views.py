@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from .forms import SignUpForm, LoginForm
 import json
 from .models import *
-from django.shortcuts import get_object_or_404
+
 
 
 
@@ -34,7 +34,6 @@ def register(request):
             user.save()
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=user.username, password=raw_password)
-            # login(request, user)
             return redirect('login')
     else:
         form = SignUpForm()
@@ -56,6 +55,7 @@ def login(request):
         form = LoginForm()
     return render(request, 'registration/login.html', {'form': form})
 
+
 @login_required(login_url='login/')
 def index(request):
     if request.user.is_authenticated:
@@ -68,10 +68,10 @@ def index(request):
         order = {'get_cart_total':0, 'get_cart_items':0, 'shipping': False}
         cartItems = order['get_cart_items']
 
-
     products = Product.objects.all()
     context = {'products': products, 'cartItems': cartItems}
     return render(request, 'myapp/index.html', context)
+
 
 @login_required(login_url='/login/')
 def cart(request):
@@ -79,11 +79,14 @@ def cart(request):
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items =order.orderitem_set.all()
+        cartItems = order.get_cart_items
     else:
         items = []
         order = {'get_cart_total': 0, 'get_cart_items': 0, 'shipping': False}
+        cartItems = order['get_cart_items']
 
-    context = {'items': items, 'order': order}
+    products = Product.objects.all()
+    context = {'items': items, 'order': order,'products':products, 'cartItems':cartItems}
     return render(request, 'myapp/cart.html', context)
 
 
@@ -96,8 +99,9 @@ def checkout(request):
     else:
         items = []
         order = {'get_cart_total': 0, 'get_cart_items': 0, 'shipping': False}
+        cartItems = order['get_cart_items']
 
-    context = {'items': items, 'order':order}
+    context = {'items': items, 'order':order, 'cartItems':cartItems}
     return render(request, 'myapp/checkout.html', context)
 
 
@@ -159,6 +163,7 @@ def processOrder(request):
 
 class Payment(TemplateView):
     template_name = 'myapp/payment.html'
+
 
 class Login(TemplateView):
     template_name = 'registration/login.html'

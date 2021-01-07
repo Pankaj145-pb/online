@@ -2,7 +2,7 @@ from django.urls import path
 from .import views
 from django.contrib.auth import views as auth_views
 
-from . views import register,Login,Payment
+from . views import register, Login, Payment
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -13,7 +13,13 @@ urlpatterns = [
     path('process_order/', views.processOrder, name='process_order'),
     path('payment/', Payment.as_view(), name='payment'),
     path('login/', Login.as_view(), name='login'),
-    # path('password_reset/', auth_views.password_reset, name='password_reset'),
-    # path('password_reset/done', auth_views.pasword_rest_done, name='done'),
+    path('password_reset/',
+         auth_views.PasswordResetView.as_view(template_name="registration/password_reset.html"),
+         name="reset_password"),
+
+    path('password_reset_sent/', auth_views.PasswordResetDoneView.as_view(), name="password_reset_done"),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
+    path('password_reset_complete/', auth_views.PasswordResetCompleteView.as_view(),name="password_reset_complete"),
+
 
 ]

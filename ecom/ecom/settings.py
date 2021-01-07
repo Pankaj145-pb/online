@@ -38,8 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp',
-    'paypal.standard.ipn',
-    'crispy_forms',
+    # 'crispy_forms',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -137,6 +136,9 @@ MEDIA_URL ='/images/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
-PAYPAL_RECEIVER_EMAIL = 'youremail@mail.com'
-
-PAYPAL_TEST = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = 'True'
+EMAIL_HOST_USER = 'coolguynet41@gmail.com'
+EMAIL_HOST_PASSWORD = '72054242Pb#'
