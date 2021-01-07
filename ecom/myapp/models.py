@@ -26,7 +26,7 @@ def update_user_profile(sender, instance, created, **kwargs):
 
 class Product(models.Model):
     name = models.CharField(max_length=200, null=True)
-    price = models.FloatField()
+    price = models.FloatField(default=0.00)
     digital = models.BooleanField(default=False, blank=True, null=True)
     image = models.ImageField(blank=True, null=True)
 
@@ -58,7 +58,7 @@ class Order(models.Model):
         for i in orderitems:
             if i.product.digital == False:
                 shipping = True
-        return shipping
+            return shipping
     
     @property
     def get_cart_total(self):

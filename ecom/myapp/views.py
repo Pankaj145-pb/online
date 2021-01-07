@@ -5,10 +5,13 @@ from django.views import generic
 from django.views.generic import TemplateView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.views.generic import TemplateView
 from django.http import JsonResponse
-from .forms import SignUpForm
+from .forms import SignUpForm, LoginForm
 import json
 from .models import *
+from django.shortcuts import get_object_or_404
 
 
 
@@ -31,13 +34,29 @@ def register(request):
             user.save()
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=user.username, password=raw_password)
-            login(request, user)
+            # login(request, user)
             return redirect('login')
     else:
         form = SignUpForm()
     return render(request, 'registration/register.html', {'form': form})
 
 
+def login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            user.refresh_from_db()  # load the profile instance created by the signal
+            user.save()
+            raw_password = form.cleaned_data.get('password')
+            user = authenticate(username=user.username, password=raw_password)
+            login(request, user)
+            return redirect('index')
+    else:
+        form = LoginForm()
+    return render(request, 'registration/login.html', {'form': form})
+
+@login_required(login_url='login/')
 def index(request):
     if request.user.is_authenticated:
         customer = request.user.customer
@@ -54,7 +73,7 @@ def index(request):
     context = {'products': products, 'cartItems': cartItems}
     return render(request, 'myapp/index.html', context)
 
-
+@login_required(login_url='/login/')
 def cart(request):
     if request.user.is_authenticated:
         customer = request.user.customer
@@ -109,9 +128,6 @@ def updateitem(request):
     return JsonResponse('item was added', safe=False)
 
 
-
-
-
 def processOrder(request):
     transaction_id = datetime.datetime.now().timestamp()
     data = json.loads(request.body)
@@ -143,3 +159,6 @@ def processOrder(request):
 
 class Payment(TemplateView):
     template_name = 'myapp/payment.html'
+
+class Login(TemplateView):
+    template_name = 'registration/login.html'
