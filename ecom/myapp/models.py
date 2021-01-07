@@ -4,12 +4,21 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 # Remember that we have to place a image field later on
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
+
+
+@receiver(post_save, sender=User)
+def update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Customer.objects.create(user=instance)
+    instance.customer.save()
 
     def __str__(self):
         return self.name

@@ -1,10 +1,12 @@
+from django.contrib.auth import authenticate, login
 from django.db.models.functions import datetime
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 from django.views.generic import TemplateView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.http import JsonResponse
+from .forms import SignUpForm
 import json
 from .models import *
 
@@ -13,10 +15,27 @@ from .models import *
 # Create your views here.
 
 
-class UserRegisterView(generic.CreateView):
-    form_class = UserCreationForm
-    template_name = "registration/register.html"
-    success_url = reverse_lazy('login')
+# class UserRegisterView(generic.CreateView):
+#     form_class = UserCreationForm
+#     template_name = "registration/register.html"
+#     success_url = reverse_lazy('login')
+
+
+def register(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            user.refresh_from_db()  # load the profile instance created by the signal
+            user.customer.email = form.cleaned_data.get('email')
+            user.save()
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=user.username, password=raw_password)
+            login(request, user)
+            return redirect('login')
+    else:
+        form = SignUpForm()
+    return render(request, 'registration/register.html', {'form': form})
 
 
 def index(request):
