@@ -3,7 +3,8 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-  <div style="width: 300px;margin-left:400px; margin-top:100px;">
+<div class="user-login"> 
+  <div style="width: 350px; margin-left:400px; margin-top:100px;">
   <h2>Login</h2>
  <div class="form-group">
   <form method="POST">
@@ -21,7 +22,10 @@
     </div>
       <button type="submit" class="btn btn-primary" style="margin-left: 450px;">Login</button>
       <a href="{% url 'register' %}" class="btn btn-success" style="margin-left: 10px;">NewUser</a>
-      <a href="{% url 'reset_password' %}" class="Forget_pass">Forgot Password</a>
+      <br>
+      <br>
+      <a href="{% url 'reset_password' %}" style="margin-left: 42%;">Forgot Password ?</a>
+      </div>
       
 
 

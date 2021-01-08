@@ -102,5 +102,26 @@ height:50px;
 }
 
 .forget_pass{
-	
+	padding-left: 20% !important;
+}
+
+.user-login{
+	border: 10px solid #40916c;
+	border-collapse: collapse;
+	height: 500px;
+	margin-top:40px;
+	background-color:black;
+	inset: #40916c;
+}
+
+.passwd{
+	text-align: center;
+	background-color:black;
+	border: 5px solid #197278; 
+	width:40%;
+	height:300px;
+	align-items: center;
+	margin-top: 150px;
+	margin-left:350px;
+	padding: 5px;
 }

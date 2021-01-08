@@ -21,7 +21,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', include('django.contrib.auth.urls')),
+    path('', include('django.contrib.auth.urls')),
     # path('password_reset/',auth_views.PasswordResetView.as_view(template_name="myapp/templates/registration/password_rest.html"),name="reset_password"),
     path('', include('myapp.urls')),
     

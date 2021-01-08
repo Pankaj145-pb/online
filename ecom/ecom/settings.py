@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     # 'crispy_forms',
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -135,3 +135,15 @@ LOGOUT_REDIRECT_URL = '/'
 MEDIA_URL ='/images/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'pankajkumar.behera@nettantra.net'
+EMAIL_HOST_PASSWORD = '72054242Pb#'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+# EMAIL_HOST = 'smtp.mailtrap.io'
+# EMAIL_HOST_USER = '7398f5a533140d'
+# EMAIL_HOST_PASSWORD = '5f98e7227cb938'
+# EMAIL_PORT = '2525'

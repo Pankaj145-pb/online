@@ -3,13 +3,15 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-<div class="rounded" style="width:450px; margin-left:400px; margin-top:20px; padding:5px; border:10px inset #267172;">
+<div class="user-register">
+<div class="rounded">
 <h2>Register</h2>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-success" style="margin-left:150px;">Register</button>
+    <button type="submit" class="btn btn-success">Register</button>
   </form>
+</div>
 </div>
 
 
