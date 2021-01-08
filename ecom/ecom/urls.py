@@ -16,13 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
-from django.contrib.auth import views as auth_views
+# from django.contrib.auth import views as auth_views
 from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('django.contrib.auth.urls')),
+    # path('', include('django.contrib.auth.urls')),
+    # path('password_reset/',auth_views.PasswordResetView.as_view(template_name="myapp/templates/registration/password_rest.html"),name="reset_password"),
     path('', include('myapp.urls')),
+    
     # path('paypal/', include('paypal.standard.ipn.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
